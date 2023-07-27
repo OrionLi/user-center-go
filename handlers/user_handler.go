@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/your_username/your_project/models"
-	"github.com/your_username/your_project/services"
+	"github.com/OrionLi/user-center-go/models"
+	"github.com/OrionLi/user-center-go/services"
 )
 
 type UserHandler struct {
