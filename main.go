@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/OrionLi/user-center-go/database"
-	"github.com/OrionLi/user-center-go/handlers"
-	"github.com/OrionLi/user-center-go/services"
+	"user-center-go/database"
+	"user-center-go/handlers"
+	"user-center-go/services"
 )
 
 func main() {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"gorm.io/gorm"
 
-	"github.com/OrionLi/user-center-go/database"
-	"github.com/OrionLi/user-center-go/models"
+	"user-center-go/database"
+	"user-center-go/models"
 )
 
 type UserService interface {
