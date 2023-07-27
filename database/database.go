@@ -2,9 +2,9 @@ package database
 
 import (
 	"fmt"
+	"github.com/OrionLi/user-center-go/models"
 	"gorm.io/gorm/schema"
 	"log"
-	"user-center-go/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
