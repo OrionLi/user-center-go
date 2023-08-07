@@ -1,60 +1,54 @@
 package handlers
 
 import (
-	"net/http"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
-
+	"context"
+	"fmt"
 	"user-center-go/models"
-	"user-center-go/services"
+	pb "user-center-go/proto/userpb"
+	"user-center-go/services" // 替换为你的service文件所在的包路径
 )
 
-type UserHandler struct {
-	userService services.UserService
+// 只提供grpc服务
+
+type Server struct {
+	UserService services.UserService
 }
 
-func NewUserHandler(userService services.UserService) *UserHandler {
-	return &UserHandler{
-		userService: userService,
+func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	user := &models.User{
+		Username: req.GetUsername(),
+		Account:  req.GetAccount(),
+		Password: req.GetPassword(),
 	}
+
+	createdUser, err := s.UserService.CreateUser(user)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &pb.CreateUserResponse{
+		Id: uint32(createdUser.ID),
+	}
+
+	return res, nil
 }
 
-func (h *UserHandler) CreateUser(c *gin.Context) {
-	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+func (s *Server) GetUser(_ context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+	userID := req.GetId()
 
-	createdUser, err := h.userService.CreateUser(&user)
+	user, err := s.UserService.GetUserByID(uint(userID))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, createdUser)
-}
-
-func (h *UserHandler) GetUserByID(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.ParseUint(idStr, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
-		return
-	}
-
-	user, err := h.userService.GetUserByID(uint(id))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+		return nil, err
 	}
 	if user == nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-		return
+		return nil, fmt.Errorf("user not found")
 	}
 
-	c.JSON(http.StatusOK, user)
-}
+	res := &pb.GetUserResponse{
+		Id:       uint32(user.ID),
+		Username: user.Username,
+		Account:  user.Account,
+	}
 
-// 其他接口类似...
+	return res, nil
+}
