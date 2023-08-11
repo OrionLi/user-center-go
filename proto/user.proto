@@ -5,9 +5,11 @@ option go_package = "/userpb";
 
 package user;
 
+import "google/protobuf/any.proto";
+
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
-  rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+  rpc CreateUser(CreateUserRequest) returns (BaseResponse) {}
+  rpc GetUser(GetUserRequest) returns (BaseResponse) {}
 }
 
 message CreateUserRequest {
@@ -16,16 +18,17 @@ message CreateUserRequest {
   string password = 3;
 }
 
-message CreateUserResponse {
-  uint32 id = 1;
-}
-
 message GetUserRequest {
   uint32 id = 1;
 }
 
-message GetUserResponse {
+message BaseResponse {
+  google.protobuf.Any data = 1;
+}
+
+message User {
   uint32 id = 1;
   string username = 2;
   string account = 3;
+  string password = 4;
 }

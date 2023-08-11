@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"user-center-go/models"
+	"google.golang.org/protobuf/types/known/anypb"
 	pb "user-center-go/proto/userpb"
 	"user-center-go/services" // 替换为你的service文件所在的包路径
 )
@@ -14,8 +14,8 @@ type Server struct {
 	UserService services.UserService
 }
 
-func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	user := &models.User{
+func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.BaseResponse, error) {
+	user := &pb.User{
 		Username: req.GetUsername(),
 		Account:  req.GetAccount(),
 		Password: req.GetPassword(),
@@ -26,14 +26,15 @@ func (s *Server) CreateUser(_ context.Context, req *pb.CreateUserRequest) (*pb.C
 		return nil, err
 	}
 
-	res := &pb.CreateUserResponse{
-		Id: uint32(createdUser.ID),
+	userResult, _ := anypb.New(createdUser)
+	res := &pb.BaseResponse{
+		Data: userResult,
 	}
 
 	return res, nil
 }
 
-func (s *Server) GetUser(_ context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+func (s *Server) GetUser(_ context.Context, req *pb.GetUserRequest) (*pb.BaseResponse, error) {
 	userID := req.GetId()
 
 	user, err := s.UserService.GetUserByID(uint(userID))
@@ -44,10 +45,9 @@ func (s *Server) GetUser(_ context.Context, req *pb.GetUserRequest) (*pb.GetUser
 		return nil, fmt.Errorf("user not found")
 	}
 
-	res := &pb.GetUserResponse{
-		Id:       uint32(user.ID),
-		Username: user.Username,
-		Account:  user.Account,
+	userResult, _ := anypb.New(user)
+	res := &pb.BaseResponse{
+		Data: userResult,
 	}
 
 	return res, nil

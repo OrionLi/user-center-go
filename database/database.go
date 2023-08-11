@@ -3,16 +3,15 @@ package database
 import (
 	"fmt"
 	"log"
+	pb "user-center-go/proto/userpb"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-
-	"user-center-go/models"
 )
 
-// 如果你要使用 MySQL 数据库，请修改下面的配置信息
+// 如果你要使用 MySQL 数据库，请修改下面的配置信息，并在main.go中改为调用InitMysqlDB
 const (
 	USER   = "root"
 	PASS   = "123456"
@@ -54,31 +53,31 @@ func InitSqliteDB() {
 }
 
 func migrateTables() {
-	err := DB.AutoMigrate(&models.User{})
+	err := DB.AutoMigrate(&pb.User{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database tables: %v", err)
 	}
 }
 
 func insertInitialData() {
-	initialData := []models.User{
-		{ID: 1, Username: "Alice", Account: "10001"},
-		{ID: 2, Username: "Bob", Account: "10002"},
-		{ID: 3, Username: "Cathy", Account: "10003"},
-		{ID: 4, Username: "Dave", Account: "10004"},
-		{ID: 5, Username: "Eric", Account: "10005"},
-		{ID: 6, Username: "Frank", Account: "10006"},
-		{ID: 7, Username: "Gary", Account: "10007"},
-		{ID: 8, Username: "Helen", Account: "10008"},
-		{ID: 9, Username: "Irene", Account: "10009"},
-		{ID: 10, Username: "Jack", Account: "10010"},
-		{ID: 11, Username: "Kate", Account: "10011"},
-		{ID: 12, Username: "Lily", Account: "10012"},
-		{ID: 13, Username: "Mike", Account: "10013"},
-		{ID: 14, Username: "Nancy", Account: "10014"},
-		{ID: 15, Username: "Olivia", Account: "10015"},
-		{ID: 16, Username: "Penny", Account: "10016"},
-		{ID: 17, Username: "Qun", Account: "10017"},
+	initialData := []pb.User{
+		{Id: 1, Username: "Alice", Account: "10001"},
+		{Id: 2, Username: "Bob", Account: "10002"},
+		{Id: 3, Username: "Cathy", Account: "10003"},
+		{Id: 4, Username: "Dave", Account: "10004"},
+		{Id: 5, Username: "Eric", Account: "10005"},
+		{Id: 6, Username: "Frank", Account: "10006"},
+		{Id: 7, Username: "Gary", Account: "10007"},
+		{Id: 8, Username: "Helen", Account: "10008"},
+		{Id: 9, Username: "Irene", Account: "10009"},
+		{Id: 10, Username: "Jack", Account: "10010"},
+		{Id: 11, Username: "Kate", Account: "10011"},
+		{Id: 12, Username: "Lily", Account: "10012"},
+		{Id: 13, Username: "Mike", Account: "10013"},
+		{Id: 14, Username: "Nancy", Account: "10014"},
+		{Id: 15, Username: "Olivia", Account: "10015"},
+		{Id: 16, Username: "Penny", Account: "10016"},
+		{Id: 17, Username: "Qun", Account: "10017"},
 		// 添加更多初始数据...
 	}
 

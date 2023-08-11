@@ -3,16 +3,16 @@ package services
 import (
 	"errors"
 	"gorm.io/gorm"
+	pb "user-center-go/proto/userpb"
 
 	"user-center-go/database"
-	"user-center-go/models"
 )
 
 type UserService interface {
-	CreateUser(user *models.User) (*models.User, error)
-	GetUserByID(id uint) (*models.User, error)
-	GetUserByUsername(username string) (*models.User, error)
-	UpdateUser(user *models.User) (*models.User, error)
+	CreateUser(user *pb.User) (*pb.User, error)
+	GetUserByID(id uint) (*pb.User, error)
+	GetUserByUsername(username string) (*pb.User, error)
+	UpdateUser(user *pb.User) (*pb.User, error)
 	DeleteUser(id uint) error
 }
 
@@ -22,7 +22,7 @@ func NewUserService() UserService {
 	return &userService{}
 }
 
-func (s *userService) CreateUser(user *models.User) (*models.User, error) {
+func (s *userService) CreateUser(user *pb.User) (*pb.User, error) {
 	err := database.DB.Create(user).Error
 	if err != nil {
 		return nil, err
@@ -30,8 +30,8 @@ func (s *userService) CreateUser(user *models.User) (*models.User, error) {
 	return user, nil
 }
 
-func (s *userService) GetUserByID(id uint) (*models.User, error) {
-	var user models.User
+func (s *userService) GetUserByID(id uint) (*pb.User, error) {
+	var user pb.User
 	err := database.DB.First(&user, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -42,8 +42,8 @@ func (s *userService) GetUserByID(id uint) (*models.User, error) {
 	return &user, nil
 }
 
-func (s *userService) GetUserByUsername(username string) (*models.User, error) {
-	var user models.User
+func (s *userService) GetUserByUsername(username string) (*pb.User, error) {
+	var user pb.User
 	err := database.DB.Where("username = ?", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -54,7 +54,7 @@ func (s *userService) GetUserByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func (s *userService) UpdateUser(user *models.User) (*models.User, error) {
+func (s *userService) UpdateUser(user *pb.User) (*pb.User, error) {
 	err := database.DB.Save(user).Error
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (s *userService) UpdateUser(user *models.User) (*models.User, error) {
 }
 
 func (s *userService) DeleteUser(id uint) error {
-	err := database.DB.Delete(&models.User{}, id).Error
+	err := database.DB.Delete(&pb.User{}, id).Error
 	if err != nil {
 		return err
 	}
