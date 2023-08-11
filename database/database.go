@@ -2,13 +2,12 @@ package database
 
 import (
 	"fmt"
-	"log"
-	pb "user-center-go/proto/userpb"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"log"
+	pb "user-center-go/proto/userpb"
 )
 
 // 如果你要使用 MySQL 数据库，请修改下面的配置信息，并在main.go中改为调用InitMysqlDB

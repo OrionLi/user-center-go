@@ -1,14 +1,13 @@
 package main
 
 import (
+	"google.golang.org/grpc"
 	"log"
 	"net"
 	"user-center-go/database"
 	"user-center-go/handlers"
-	"user-center-go/services"
-
-	"google.golang.org/grpc"
 	pb "user-center-go/proto/userpb"
+	"user-center-go/services"
 )
 
 func main() {

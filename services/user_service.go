@@ -3,9 +3,8 @@ package services
 import (
 	"errors"
 	"gorm.io/gorm"
-	pb "user-center-go/proto/userpb"
-
 	"user-center-go/database"
+	pb "user-center-go/proto/userpb"
 )
 
 type UserService interface {

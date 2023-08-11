@@ -3,13 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"time"
-
 	pb "user-center-go/proto/userpb" // 替换为你的 proto 文件的包路径
-
-	"google.golang.org/grpc"
 )
 
 func main() {
