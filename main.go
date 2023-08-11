@@ -1,17 +1,15 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
-
+	"log"
 	"user-center-go/database"
 	"user-center-go/handlers"
 	"user-center-go/services"
 )
 
 func main() {
-	database.InitDB()
+	database.InitSqliteDB()
 
 	userService := services.NewUserService()
 	userHandler := handlers.NewUserHandler(userService)
